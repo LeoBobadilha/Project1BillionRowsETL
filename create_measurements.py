@@ -90,7 +90,7 @@ def build_test_data(weather_station_names, num_rows_to_create):
     start_time = time.time()
     coldest_temp = -99.9
     hottest_temp = 99.9
-    station_names_10k_max = random.choices(weather_station_names, k=10_000)
+    station_names_10k_max = random.choices(weather_station_names, k=min(10_000, len(weather_station_names)))
     batch_size = 10000 # instead of writing line by line to file, process a batch of stations and put it to disk
     progress_step = max(1, (num_rows_to_create // batch_size) // 100)
     print('Criando o arquivo... isso vai demorar uns 10 minutos...')
@@ -123,7 +123,7 @@ def main():
     """
     main program function
     """
-    num_rows_to_create = 1000000
+    num_rows_to_create = 10_000
     weather_station_names = []
     weather_station_names = build_weather_station_name_list()
     print(estimate_file_size(weather_station_names, num_rows_to_create))
