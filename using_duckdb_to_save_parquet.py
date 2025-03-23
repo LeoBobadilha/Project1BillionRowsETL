@@ -24,4 +24,8 @@ if __name__ == "__main__":
     took = time.time() - start_time
     print(f"Duckdb Took: {took:.2f} sec")
 
+    ## parquet eh um tipo de arquivo que salva os dados de forma colunar. muito bom pra grande volume de dados
+
+    
+
     
