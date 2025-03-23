@@ -1,3 +1,6 @@
+#3 estrategias para trabalhar com pandas, pegar menos colunas, pensar estruturas de dados(melhor datatype possivel), fazer o chunk
+
+
 import pandas as pd 
 from multiprocessing import Pool,cpu_count
 from tqdm import tqdm #importa o tqdm para a barra de processo
