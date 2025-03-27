@@ -1,30 +1,27 @@
-#3 estrategias para trabalhar com pandas, pegar menos colunas, pensar estruturas de dados(melhor datatype possivel), fazer o chunk
-
-
 import pandas as pd 
-from multiprocessing import Pool,cpu_count
-from tqdm import tqdm #importa o tqdm para a barra de processo
+from multiprocessing import Pool, cpu_count
+from tqdm import tqdm  # Importing tqdm for the progress bar
 
 CONCURRENCY = cpu_count()
 
-total_linhas = 100_000_000 # Number of known of  rows
-chunksize = 10_000_000 # Setting the size of the chunk
-filename = "data/measurements.txt" # Certifiyng that is the correct size
+total_rows = 100_000_000  # Number of known rows
+chunksize = 10_000_000  # Setting the chunk size
+filename = "data/measurements.txt"  # Ensuring this is the correct file path
 
 def process_chunk(chunk):
-    #Agreggating the data inside of the chunck to use Pandas
-    aggregated = chunk.groupby("station")["measure"].agg(["min","max","mean"]).reset_index()
+    # Aggregating data inside the chunk using Pandas
+    aggregated = chunk.groupby("station")["measure"].agg(["min", "max", "mean"]).reset_index()
     return aggregated
 
-def create_df_with_pandas(filename, total_linhas, chunksize=chunksize):
-    total_chunks = total_linhas // chunksize + (1 if total_linhas % chunksize else 0)
+def create_df_with_pandas(filename, total_rows, chunksize=chunksize):
+    total_chunks = total_rows // chunksize + (1 if total_rows % chunksize else 0)
     results = []
 
     with pd.read_csv(filename, sep=';', header=None, names=['station', 'measure'], chunksize=chunksize) as reader:
-        # Envolvendo o iterador com tqdm para visualizar o progresso
+        # Wrapping the iterator with tqdm to visualize progress
         with Pool(CONCURRENCY) as pool:
-            for chunk in tqdm(reader, total=total_chunks, desc="Processando"):
-                # Processa cada chunk em paralelo
+            for chunk in tqdm(reader, total=total_chunks, desc="Processing"):
+                # Process each chunk in parallel
                 result = pool.apply_async(process_chunk, (chunk,))
                 results.append(result)
 
@@ -43,11 +40,10 @@ def create_df_with_pandas(filename, total_linhas, chunksize=chunksize):
 if __name__ == "__main__":
     import time
 
-    print("Iniciando o processamento do arquivo.")
+    print("Starting file processing.")
     start_time = time.time()
-    df = create_df_with_pandas(filename, total_linhas, chunksize)
+    df = create_df_with_pandas(filename, total_rows, chunksize)
     took = time.time() - start_time
 
     print(df.head())
     print(f"Processing took: {took:.2f} sec")
-

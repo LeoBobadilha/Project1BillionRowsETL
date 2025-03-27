@@ -14,17 +14,17 @@ def create_duckdb():
     
     result.show()
 
-    #Save the result to a Parquet File
+    # Save the result to a Parquet file
     result.write_parquet("data/measurements_summary.parquet")
 
 if __name__ == "__main__":
-    import time
     start_time = time.time()
     create_duckdb()
     took = time.time() - start_time
-    print(f"Duckdb Took: {took:.2f} sec")
+    print(f"DuckDB Took: {took:.2f} sec")
 
-    ## parquet eh um tipo de arquivo que salva os dados de forma colunar. muito bom pra grande volume de dados
+    # Parquet is a file format that stores data in a columnar way, making it very efficient for large volumes of data.
+
 
     
 
