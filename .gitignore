@@ -10,6 +10,8 @@ measurements1M.txt
 measurements10M.txt
 measurements100M.txt
 measurements.txt
+measurements_summary.parquet
+measurements_summary.parquet.txt
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

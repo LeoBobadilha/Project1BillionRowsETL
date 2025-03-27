@@ -1,54 +1,54 @@
 import pandas as pd
 import numpy as np
 
-#Function to create a DataFrame example of 100k rows and 20 cities
-def criar_medidas(num_linhas=100000, num_cidades=20, semente=None):
-    estado = np.random.RandomState(semente)
-    cidades = [f"Cidade_{i}"for i in range(num_cidades)]
-    dados = {
-        "estacao": estado.choice(cidades, size=num_linhas),
-        "medida": estado.uniform(-20,50, size=num_linhas).round(4)
+# Function to create an example DataFrame with 100k rows and 20 cities
+def create_measurements(num_rows=100000, num_cities=20, seed=None):
+    state = np.random.RandomState(seed)
+    cities = [f"City_{i}" for i in range(num_cities)]
+    data = {
+        "station": state.choice(cities, size=num_rows),
+        "measurement": state.uniform(-20, 50, size=num_rows).round(4)
     }
-    df = pd.DataFrame(dados)
+    df = pd.DataFrame(data)
     return df
 
-#Create an dataframe of example
-df = criar_medidas(semente=0)
+# Create an example DataFrame
+df = create_measurements(seed=0)
 
-#Display type of data and usage of memory before conversion
-print("Tipos de dados e uso de memoria antes da conversa")
+# Display data types and memory usage before conversion
+print("Data types and memory usage before conversion")
 print(df.dtypes)
 print(df.memory_usage(deep=True))
 
-#Save the initial memory usage
-uso_memoria_inicial = df.memory_usage(deep=True).sum()
+# Save the initial memory usage
+initial_memory_usage = df.memory_usage(deep=True).sum()
 
-detalhes_memoria_antes = df.memory_usage(deep=True)
+memory_details_before = df.memory_usage(deep=True)
 
-#transform type of data for eficient type
-df["estacao"] = df ["estacao"].astype("category")
-df["medida"] = pd.to_numeric(df["medida"], downcast="float")
+# Transform data types for efficiency
+df["station"] = df["station"].astype("category")
+df["measurement"] = pd.to_numeric(df["measurement"], downcast="float")
 
-#Display type of data and usage of memory after conversion
-print("Tipos de dados e uso de memoria depois da conversao")
+# Display data types and memory usage after conversion
+print("Data types and memory usage after conversion")
 print(df.dtypes)
 print(df.memory_usage(deep=True))
 
-#Save the final memory of use
-uso_memoria_final = df.memory_usage(deep=True).sum()
+# Save the final memory usage
+final_memory_usage = df.memory_usage(deep=True).sum()
 
-#Calculate the reduction of memory
-reducao_total = 1 - (uso_memoria_final / uso_memoria_inicial)
-reducao_estacao = 1 - (df.memory_usage(deep=True)["estacao"] / detalhes_memoria_antes["estacao"])
-reducao_medida = 1 - (df.memory_usage(deep=True)["medida"] / detalhes_memoria_antes["medida"])
+# Calculate memory reduction
+total_reduction = 1 - (final_memory_usage / initial_memory_usage)
+station_reduction = 1 - (df.memory_usage(deep=True)["station"] / memory_details_before["station"])
+measurement_reduction = 1 - (df.memory_usage(deep=True)["measurement"] / memory_details_before["measurement"])
 
-print(f"\nReducao total no uso de memoria: {reducao_total:.2f}")
-print(f"\nReducao no uso de memoria para a coluna 'estacao': {reducao_estacao:.2f}")
-print(f"\nReducao no uso de memoria para a coluna 'estacao': {reducao_medida:.2f}")
+print(f"\nTotal memory usage reduction: {total_reduction:.2f}")
+print(f"\nMemory usage reduction for the 'station' column: {station_reduction:.2f}")
+print(f"\nMemory usage reduction for the 'measurement' column: {measurement_reduction:.2f}")
 
-#Detail of usage of memory before and after the conversion
-print("\nDetalhes do uso de memoria antes e depois da conversao")
-print(detalhes_memoria_antes)
+# Detail memory usage before and after conversion
+print("\nMemory usage details before and after conversion")
+print(memory_details_before)
 
-print("\nDetalhes do uso de memoria apos a conversao:")
+print("\nMemory usage details after conversion:")
 print(df.memory_usage(deep=True))
